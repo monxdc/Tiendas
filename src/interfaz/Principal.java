@@ -11,6 +11,7 @@ public class Principal extends javax.swing.JFrame {
     Conexion con1 = new Conexion();
     //ggggggggggggg
     //s
+    //pene durisimo
     Connection conet;
     Statement st;
     ResultSet rs;
