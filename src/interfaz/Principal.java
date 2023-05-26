@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 public class Principal extends javax.swing.JFrame {
     Conexion con1 = new Conexion();
     //ggggggggggggg
+    //s
     Connection conet;
     Statement st;
     ResultSet rs;
