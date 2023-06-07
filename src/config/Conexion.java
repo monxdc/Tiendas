@@ -17,12 +17,12 @@ public class Conexion {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url + bd, user, password);
-            JOptionPane.showMessageDialog(null, "Conexión segura a la base de datos:  " + bd);
-            // System.out.println("Conexión segura a la base de datos " + bd);
+             System.out.println("Conexión segura a la base de datos " + bd);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "No se conectó a la base de datos: " + bd);
+    
+             System.out.println("ERROR ");
             System.out.println(e);
-            //Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+       
         }
 
         return con;
