@@ -1,20 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaz;
 
 import config.Conexion;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Erick DC
- */
+
+
 public class AgregarProducto extends javax.swing.JFrame {
     Conexion con1 = new Conexion();
     Connection conet;
@@ -26,44 +21,96 @@ public class AgregarProducto extends javax.swing.JFrame {
      */
     public AgregarProducto() {
         initComponents();
+        agregarProveedor(jCIdProveedor);
+        familia(jCFamilia);
+        tipo(jCTipo);
+       
+        
+        
     }
+ 
     void agregar(){
-
+        String clavec=String.valueOf(jTClave_corta.getText());
+        String clavel=String.valueOf(jTClave_larga.getText());
         String nombre=jTNombre.getText();
         String descripcion=jTDescripcion.getText();
-        String tipo =jTTipo.getText();
-        String familia =jTFamilia.getText();
-        try{
-            double precio=Double.parseDouble(jTExistencias.getText());
-            String clave_corta = (String.valueOf(jTClave_corta.getText()));
-            String clave_larga = (String.valueOf(jTClave_larga.getText()));
-            String existencias = (String.valueOf(jTExistencias.getText()));
-            String idProvee = (String.valueOf(jTIdProveedor.getText()));
+        String existencias= String.valueOf(jTExistencias.getText());
+        String tipo =jCTipo.getSelectedItem().toString();
+       // jTTipo.setText(tipo);
+       String familia =jCFamilia.getSelectedItem().toString();
+      // jTFam.setText(familia);
+        String prov = String.valueOf(jTIdProveedor.getText());
+        //jTNP.setText(prov);
+   
             try{
-            String sql = "INSERT INTO productos(clave_corta,clave_larga, nombre,"
-                        + " descripcion, existencias,tipo,familia,idproveedor) "
-                        + "values (','"
-                        + clave_corta + "','" + clave_larga + "','"
-                        + nombre +  "','" + descripcion + "','" + existencias + "','"
-                    + tipo + "','" + familia + "','" + idProvee + "')";
+           String sql="INSERT INTO productos(clave_corta,clave_larga,"
+                   + "nombre,descripcion,existencias,tipo,familia,"
+                   + "idproveedor) values('"+clavec+"','"+clavel+"',"
+                   + "'"+nombre+"','"+descripcion+"','"+existencias+"',"
+                   + "'"+tipo+"','"+familia+"','"+prov+"')";
                 conet = con1.getConnection();
                 st = conet.createStatement();
                 st.executeUpdate(sql);
                 JOptionPane.showMessageDialog(null, "Dato agregado");
+               //Mandar a llamar el método de la clase productos
+            Productos tabla = new Productos();
+            tabla.limpiarTabla();
             } catch (Exception e) {
                 System.out.println("" + e);
             }
-        } catch (Exception e) {
-            System.out.println("" + e);
-        }
+       
 
     }
+      
+       
+    void agregarProveedor( JComboBox nomprov){
+     /*En este método se va a listar los nombres de los proveedores en el combo box,
+     como parámetro recibe el combo box (idprov)*/
+        try {
+            String sql="Select nombre_prov from proveedores";
+            conet = con1.getConnection();
+            st = conet.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()){
+            nomprov.addItem(rs.getString("nombre_prov"));
+           
+            }
+        } catch (Exception e) {
+            System.out.println("Error: "+e);
+        }
+        
+    }
+    void familia(JComboBox familia){
+        try {
+            String sql="select familia from productos";
+            conet = con1.getConnection();
+            st = conet.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()){
+                familia.addItem(rs.getString("familia"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: "+e);
+        }
+    }
+    void tipo(JComboBox tipo){
+        try {
+              String sql="select tipo from productos";
+              conet = con1.getConnection();
+            st = conet.createStatement();
+            rs = st.executeQuery(sql);
+            while(rs.next()){
+                tipo.addItem(rs.getString("tipo"));
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Error: "+e);
+        }
+  
+    }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+
+ 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -71,7 +118,6 @@ public class AgregarProducto extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLIdCliente = new javax.swing.JLabel();
         jTNombre = new javax.swing.JTextField();
@@ -84,13 +130,16 @@ public class AgregarProducto extends javax.swing.JFrame {
         jLColonia2 = new javax.swing.JLabel();
         jLColonia3 = new javax.swing.JLabel();
         jLColonia4 = new javax.swing.JLabel();
-        jTTipo = new javax.swing.JTextField();
-        jTFamilia = new javax.swing.JTextField();
         jTClave_corta = new javax.swing.JTextField();
         jTClave_larga = new javax.swing.JTextField();
         jCIdProveedor = new javax.swing.JComboBox<>();
         jTIdProveedor = new javax.swing.JTextField();
-        jTProveedor = new javax.swing.JTextField();
+        jCTipo = new javax.swing.JComboBox<>();
+        jCFamilia = new javax.swing.JComboBox<>();
+        jTTipo = new javax.swing.JTextField();
+        jTFam = new javax.swing.JTextField();
+        jTNP = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,7 +148,7 @@ public class AgregarProducto extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(153, 255, 153));
 
         jLabel1.setFont(new java.awt.Font("Malgun Gothic Semilight", 0, 36)); // NOI18N
-        jLabel1.setText("Agregar Producto");
+        jLabel1.setText("Registro de productos");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -117,13 +166,6 @@ public class AgregarProducto extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap())
         );
-
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         jPanel4.setBackground(new java.awt.Color(153, 255, 153));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -164,18 +206,6 @@ public class AgregarProducto extends javax.swing.JFrame {
         jLColonia4.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLColonia4.setText("Clave Larga");
 
-        jTTipo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTTipoKeyTyped(evt);
-            }
-        });
-
-        jTFamilia.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTFamiliaKeyTyped(evt);
-            }
-        });
-
         jTClave_corta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTClave_cortaKeyTyped(evt);
@@ -212,14 +242,24 @@ public class AgregarProducto extends javax.swing.JFrame {
             }
         });
 
-        jTProveedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTProveedorActionPerformed(evt);
+        jCTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Camara Fria", "Pasillo" }));
+        jCTipo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCTipoItemStateChanged(evt);
             }
         });
-        jTProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTProveedorKeyTyped(evt);
+
+        jCFamilia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Lacteos", "Panificados", "Embutidos" }));
+        jCFamilia.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCFamiliaItemStateChanged(evt);
+            }
+        });
+
+        jButton1.setText("Agregar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -228,9 +268,9 @@ public class AgregarProducto extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLColonia4)
                             .addComponent(jLIdCliente))
@@ -239,33 +279,46 @@ public class AgregarProducto extends javax.swing.JFrame {
                             .addComponent(jTClave_corta, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTClave_larga, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLDireccion)
                             .addComponent(jLExistencias)
                             .addComponent(jLColonia1)
-                            .addComponent(jLColonia2)
-                            .addComponent(jLColonia3)
-                            .addComponent(jLNombre))
+                            .addComponent(jLNombre)
+                            .addComponent(jLColonia2))
+                        .addGap(16, 16, 16)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel4Layout.createSequentialGroup()
                                     .addGap(40, 40, 40)
                                     .addComponent(jTDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTExistencias, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(jCTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(39, 39, 39)
+                                        .addComponent(jTIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTTipo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTFamilia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTExistencias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel4Layout.createSequentialGroup()
-                                            .addComponent(jCIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(39, 39, 39)
-                                            .addComponent(jTIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jTProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jTTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jCFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(142, 142, 142)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
-                                .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTFam, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLColonia3)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTNP)
+                                    .addComponent(jCIdProveedor, 0, 165, Short.MAX_VALUE)))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(jButton1)))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -293,21 +346,26 @@ public class AgregarProducto extends javax.swing.JFrame {
                     .addComponent(jTExistencias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLColonia1))
-                .addGap(18, 18, 18)
+                    .addComponent(jLColonia1)
+                    .addComponent(jCTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLColonia2))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jTFam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLColonia3)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jCIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jTProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(87, Short.MAX_VALUE))
+                    .addComponent(jCIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTIdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTNP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -317,13 +375,8 @@ public class AgregarProducto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(189, 189, 189)
-                                .addComponent(jButton1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 11, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
@@ -337,9 +390,7 @@ public class AgregarProducto extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(83, 83, 83))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -355,7 +406,7 @@ public class AgregarProducto extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -373,14 +424,6 @@ public class AgregarProducto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTNombreKeyTyped
 
-    private void jTTipoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTipoKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTTipoKeyTyped
-
-    private void jTFamiliaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFamiliaKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTFamiliaKeyTyped
-
     private void jTClave_cortaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTClave_cortaKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_jTClave_cortaKeyTyped
@@ -390,15 +433,15 @@ public class AgregarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_jTClave_largaKeyTyped
 
     private void jCIdProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCIdProveedorItemStateChanged
-        String nombre_p = (String) jCIdProveedor.getSelectedItem(); //almacenar item en variable
+        String proveedor = (String) jCIdProveedor.getSelectedItem(); //almacenar item en variable
         try {
-            String sql = "Select idproveedor from proveedores where nombre='" + nombre_p + "'";
+            String sql = "Select idproveedor, nombre_prov from proveedores where nombre_prov='" + proveedor + "'";
             conet = con1.getConnection();
             st = conet.createStatement();
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                jTIdProveedor.setText((rs.getString("idproveedor")));;
-                jTProveedor.setText(nombre_p);
+                jTIdProveedor.setText((rs.getString("idproveedor")));
+              
             }
 
         } catch (Exception e) {
@@ -415,18 +458,22 @@ public class AgregarProducto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCIdProveedorActionPerformed
 
-    private void jTProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTProveedorKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTProveedorKeyTyped
-
     private void jTIdProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTIdProveedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTIdProveedorActionPerformed
 
-    private void jTProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTProveedorActionPerformed
+    private void jCTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCTipoItemStateChanged
         // TODO add your handling code here:
-        agregar();
-    }//GEN-LAST:event_jTProveedorActionPerformed
+        String tipo  = (String) jCTipo.getSelectedItem();
+                jTTipo.setText(tipo);
+        
+    }//GEN-LAST:event_jCTipoItemStateChanged
+
+    private void jCFamiliaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCFamiliaItemStateChanged
+        // TODO add your handling code here:
+        String familia  = (String) jCFamilia.getSelectedItem();
+                jTFam.setText(familia);
+    }//GEN-LAST:event_jCFamiliaItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -465,7 +512,9 @@ public class AgregarProducto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jCIdProveedor;
+    public javax.swing.JComboBox<String> jCFamilia;
+    public javax.swing.JComboBox<String> jCIdProveedor;
+    public javax.swing.JComboBox<String> jCTipo;
     private javax.swing.JLabel jLColonia1;
     private javax.swing.JLabel jLColonia2;
     private javax.swing.JLabel jLColonia3;
@@ -478,14 +527,14 @@ public class AgregarProducto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTClave_corta;
-    private javax.swing.JTextField jTClave_larga;
-    private javax.swing.JTextField jTDescripcion;
-    private javax.swing.JTextField jTExistencias;
-    private javax.swing.JTextField jTFamilia;
+    public javax.swing.JTextField jTClave_corta;
+    public javax.swing.JTextField jTClave_larga;
+    public javax.swing.JTextField jTDescripcion;
+    public javax.swing.JTextField jTExistencias;
+    public javax.swing.JTextField jTFam;
     private javax.swing.JTextField jTIdProveedor;
-    private javax.swing.JTextField jTNombre;
-    private javax.swing.JTextField jTProveedor;
-    private javax.swing.JTextField jTTipo;
+    public javax.swing.JTextField jTNP;
+    public javax.swing.JTextField jTNombre;
+    public javax.swing.JTextField jTTipo;
     // End of variables declaration//GEN-END:variables
 }
