@@ -30,7 +30,7 @@ public class AgregarProducto extends javax.swing.JFrame {
     }
  
     void agregar(){
-        String clavec=String.valueOf(jTClave_corta.getText());
+        /*String clavec=String.valueOf(jTClave_corta.getText());*/
         String clavel=String.valueOf(jTClave_larga.getText());
         String nombre=jTNombre.getText();
         String descripcion=jTDescripcion.getText();
@@ -43,9 +43,9 @@ public class AgregarProducto extends javax.swing.JFrame {
         //jTNP.setText(prov);
    
             try{
-           String sql="INSERT INTO productos(clave_corta,clave_larga,"
+           String sql="INSERT INTO productos(clave_larga,"
                    + "nombre,descripcion,existencias,tipo,familia,"
-                   + "idproveedor) values('"+clavec+"','"+clavel+"',"
+                   + "idproveedor) values('"+clavel+"',"
                    + "'"+nombre+"','"+descripcion+"','"+existencias+"',"
                    + "'"+tipo+"','"+familia+"','"+prov+"')";
                 conet = con1.getConnection();
@@ -206,6 +206,7 @@ public class AgregarProducto extends javax.swing.JFrame {
         jLColonia4.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLColonia4.setText("Clave Larga");
 
+        jTClave_corta.setEditable(false);
         jTClave_corta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTClave_cortaKeyTyped(evt);
@@ -414,6 +415,8 @@ public class AgregarProducto extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         agregar();
+        Productos p = new Productos();
+        p.consultar();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTExistenciasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTExistenciasKeyTyped

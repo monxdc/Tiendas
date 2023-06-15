@@ -1,7 +1,7 @@
  
 package interfaz;
 import config.Conexion;
-import java.awt.ComponentOrientation;
+//import java.awt.ComponentOrientation;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -24,12 +24,13 @@ public class Productos extends javax.swing.JFrame {
         setLocationRelativeTo(null); //<-- Centrar
         consultar(); //<-- Lista la tabla de productos (select from)
         jTExism.setVisible(false);
+         jTBuscar.setVisible(false);
         
     }
     void consultar(){
         String sql ="SELECT clave_corta,clave_larga,nombre,descripcion,"
                 + "existencias,tipo, familia, nombre_prov from "
-                + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor;";
+                + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor";
         try {
             conet = con1.getConnection();
             st = conet.createStatement();
@@ -91,6 +92,189 @@ public class Productos extends javax.swing.JFrame {
         }
     
     }
+    void eliminartabla(){
+        for (int i = 0; i <tableProductos.getRowCount(); i++) {
+            tmProductos.removeRow(i);
+            i -= 1;
+        }
+    
+    }
+    void buscar(){
+        String bus = jTBuscar.getText();
+        String dato= jTDato.getText();
+        if(bus!=null){
+            switch (bus) {
+                case "Clave Corta":
+                    String sql ="SELECT clave_corta,clave_larga,nombre,descripcion,"
+                + "existencias,tipo, familia, nombre_prov from "
+                + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor "
+                            + "where clave_corta LIKE '%"+dato+"%'";
+                    try {
+                        eliminartabla();
+                        conet = con1.getConnection();
+                        st = conet.createStatement();
+                        rs = st.executeQuery(sql);
+                        Object[] productos = new Object[8];
+                        tmProductos = (DefaultTableModel) tableProductos.getModel();
+                        while(rs.next()){
+                            productos[0] = rs.getInt("clave_corta");
+                            productos[1] = rs.getInt("clave_larga");
+                            productos[2] = rs.getString("nombre");
+                            productos[3] = rs.getString("descripcion");
+                            productos[4] = rs.getInt("existencias");
+                            productos[5] = rs.getString("tipo");
+                            productos[6] = rs.getString("familia");
+                            productos[7] = rs.getString("nombre_prov");
+                            tmProductos.addRow(productos);                         
+                        }if(tmProductos.getRowCount()==0){
+                            JOptionPane.showMessageDialog(null, "No existe este registro", "ERROR", JOptionPane.ERROR_MESSAGE);
+                         jTBuscar.setText("");
+                        consultar();
+                                }
+                        tableProductos.setModel(tmProductos);
+                    } catch (Exception e) {
+                        System.out.println("ERROR CC:" +e);
+                    }
+                    break;     
+                case "Nombre":
+                    String sqln = "SELECT clave_corta,clave_larga,nombre,descripcion,"
+                            + "existencias,tipo, familia, nombre_prov from "
+                            + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor "
+                            + "where nombre LIKE '%" + dato + "%'";
+                    try {
+                        eliminartabla();
+                        conet = con1.getConnection();
+                        st = conet.createStatement();
+                        rs = st.executeQuery(sqln);
+                        Object[] productos = new Object[8];
+                        tmProductos = (DefaultTableModel) tableProductos.getModel();
+                        while (rs.next()) {
+                            productos[0] = rs.getInt("clave_corta");
+                            productos[1] = rs.getInt("clave_larga");
+                            productos[2] = rs.getString("nombre");
+                            productos[3] = rs.getString("descripcion");
+                            productos[4] = rs.getInt("existencias");
+                            productos[5] = rs.getString("tipo");
+                            productos[6] = rs.getString("familia");
+                            productos[7] = rs.getString("nombre_prov");
+                            tmProductos.addRow(productos);
+                        }
+                        if (tmProductos.getRowCount() == 0) {
+                            JOptionPane.showMessageDialog(null, "No existe este registro", "ERROR", JOptionPane.ERROR_MESSAGE);
+                            jTBuscar.setText("");
+                            consultar();
+                        }
+                        tableProductos.setModel(tmProductos);
+                    } catch (Exception e) {
+                        System.out.println("ERROR N:" + e);
+                    }
+                    break;
+                case "Existencias":
+                  
+                    String sqle = "SELECT clave_corta,clave_larga,nombre,descripcion,"
+                            + "existencias,tipo, familia, nombre_prov from "
+                            + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor "
+                            + "order by existencias";
+                    try {
+                        eliminartabla();
+                        conet = con1.getConnection();
+                        st = conet.createStatement();
+                        rs = st.executeQuery(sqle);
+                        Object[] productos = new Object[8];
+                        tmProductos = (DefaultTableModel) tableProductos.getModel();
+                        while (rs.next()) {
+                            productos[0] = rs.getInt("clave_corta");
+                            productos[1] = rs.getInt("clave_larga");
+                            productos[2] = rs.getString("nombre");
+                            productos[3] = rs.getString("descripcion");
+                            productos[4] = rs.getInt("existencias");
+                            productos[5] = rs.getString("tipo");
+                            productos[6] = rs.getString("familia");
+                            productos[7] = rs.getString("nombre_prov");
+                            tmProductos.addRow(productos);
+                        }
+                        if (tmProductos.getRowCount() == 0) {
+                            JOptionPane.showMessageDialog(null, "No existe este registro", "ERROR", JOptionPane.ERROR_MESSAGE);
+                            jTBuscar.setText("");
+                            consultar();
+                        }
+                        tableProductos.setModel(tmProductos);
+                    } catch (Exception e) {
+                        System.out.println("ERROR N:" + e);
+                    }
+                     break;
+                case "Tipo":
+                    String sqlt = "SELECT clave_corta,clave_larga,nombre,descripcion,"
+                            + "existencias,tipo, familia, nombre_prov from "
+                            + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor "
+                            + "where tipo LIKE '%" + dato + "%'";
+                    try {
+                        eliminartabla();
+                        conet = con1.getConnection();
+                        st = conet.createStatement();
+                        rs = st.executeQuery(sqlt);
+                        Object[] productos = new Object[8];
+                        tmProductos = (DefaultTableModel) tableProductos.getModel();
+                        while (rs.next()) {
+                            productos[0] = rs.getInt("clave_corta");
+                            productos[1] = rs.getInt("clave_larga");
+                            productos[2] = rs.getString("nombre");
+                            productos[3] = rs.getString("descripcion");
+                            productos[4] = rs.getInt("existencias");
+                            productos[5] = rs.getString("tipo");
+                            productos[6] = rs.getString("familia");
+                            productos[7] = rs.getString("nombre_prov");
+                            tmProductos.addRow(productos);
+                        }
+                        if (tmProductos.getRowCount() == 0) {
+                            JOptionPane.showMessageDialog(null, "No existe este registro", "ERROR", JOptionPane.ERROR_MESSAGE);
+                            jTBuscar.setText("");
+                            consultar();
+                        }
+                        tableProductos.setModel(tmProductos);
+                    } catch (Exception e) {
+                        System.out.println("ERROR T:" + e);
+                    }
+                    break;
+                case "Familia":
+                    String sqlf = "SELECT clave_corta,clave_larga,nombre,descripcion,"
+                            + "existencias,tipo, familia, nombre_prov from "
+                            + "productos JOIN proveedores ON productos.idproveedor=proveedores.idproveedor "
+                            + "where familia LIKE '%" + dato + "%'";
+                    try {
+                        eliminartabla();
+                        conet = con1.getConnection();
+                        st = conet.createStatement();
+                        rs = st.executeQuery(sqlf);
+                        Object[] productos = new Object[8];
+                        tmProductos = (DefaultTableModel) tableProductos.getModel();
+                        while (rs.next()) {
+                            productos[0] = rs.getInt("clave_corta");
+                            productos[1] = rs.getInt("clave_larga");
+                            productos[2] = rs.getString("nombre");
+                            productos[3] = rs.getString("descripcion");
+                            productos[4] = rs.getInt("existencias");
+                            productos[5] = rs.getString("tipo");
+                            productos[6] = rs.getString("familia");
+                            productos[7] = rs.getString("nombre_prov");
+                            tmProductos.addRow(productos);
+                        }
+                        if (tmProductos.getRowCount() == 0) {
+                            JOptionPane.showMessageDialog(null, "No existe este registro", "ERROR", JOptionPane.ERROR_MESSAGE);
+                            jTBuscar.setText("");
+                            consultar();
+                        }
+                        tableProductos.setModel(tmProductos);
+                    } catch (Exception e) {
+                        System.out.println("ERROR F:" + e);
+                    }
+                    break;        
+            }
+        }
+    }
+   
+    
+    
      
      
 
@@ -116,11 +300,16 @@ public class Productos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableProductos = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
-        jBAgregar1 = new javax.swing.JButton();
         jBPrincipal = new javax.swing.JButton();
         jBProveedor = new javax.swing.JButton();
         jBCancelar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jTExism = new javax.swing.JTextField();
+        jBBuscar = new javax.swing.JButton();
+        jTBuscar = new javax.swing.JTextField();
+        jCOpciones = new javax.swing.JComboBox<>();
+        jTDato = new javax.swing.JTextField();
+        jBback = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,7 +374,7 @@ public class Productos extends javax.swing.JFrame {
                 .addComponent(jBModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(jBEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(153, 255, 153));
@@ -204,13 +393,12 @@ public class Productos extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(0, 24, Short.MAX_VALUE))
+            .addComponent(jLabel1)
         );
 
         jPanel4.setBackground(new java.awt.Color(102, 102, 102));
 
+        tableProductos.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         tableProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -235,7 +423,7 @@ public class Productos extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,14 +431,6 @@ public class Productos extends javax.swing.JFrame {
         );
 
         jPanel5.setBackground(new java.awt.Color(153, 255, 153));
-
-        jBAgregar1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jBAgregar1.setText("proove produ");
-        jBAgregar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBAgregar1ActionPerformed(evt);
-            }
-        });
 
         jBPrincipal.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jBPrincipal.setText("Principal");
@@ -276,43 +456,66 @@ public class Productos extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton1.setText("Control de productos");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(273, 273, 273)
-                .addComponent(jBAgregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addContainerGap()
                 .addComponent(jBPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56)
+                .addGap(18, 18, 18)
+                .addComponent(jBProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jButton1)
+                .addGap(53, 53, 53)
                 .addComponent(jBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(152, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(107, 107, 107)
-                    .addComponent(jBProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(658, Short.MAX_VALUE)))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBAgregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                    .addContainerGap(40, Short.MAX_VALUE)
+                    .addComponent(jBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(14, 14, 14)))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
 
         jTExism.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTExismActionPerformed(evt);
+            }
+        });
+
+        jBBuscar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jBBuscar.setText("Buscar");
+        jBBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBBuscarActionPerformed(evt);
+            }
+        });
+
+        jTBuscar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        jCOpciones.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jCOpciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Clave Corta", "Nombre", "Existencias", "Tipo", "Familia" }));
+        jCOpciones.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCOpcionesItemStateChanged(evt);
+            }
+        });
+
+        jTDato.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        jBback.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/regresar.jpg"))); // NOI18N
+        jBback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBbackActionPerformed(evt);
             }
         });
 
@@ -325,34 +528,60 @@ public class Productos extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jTExism, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jCOpciones, 0, 159, Short.MAX_VALUE)
+                            .addComponent(jTDato))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jTExism, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jBBuscar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBback)))
+                        .addGap(122, 122, 122))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jTExism, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCOpciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jBBuscar)
+                                .addComponent(jTDato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jBback, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTExism, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -388,11 +617,9 @@ public class Productos extends javax.swing.JFrame {
         if (JOptionPane.OK_OPTION == si) {
            
             exs = JOptionPane.showInputDialog("INTRODUZCA LAS NUEVAS EXISTENCIAS: ");
-            //Integer.parseInt(exs);
-            //jTExism.setVisible();
+
             jTExism.setText(""+exs);
-            
-           // aP.setVisible(true);
+
           modificar();
             consultar();
         }else{
@@ -409,10 +636,6 @@ public class Productos extends javax.swing.JFrame {
         consultar();
     }//GEN-LAST:event_jBEliminarActionPerformed
 
-    private void jBAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBAgregar1ActionPerformed
-
     private void jBPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPrincipalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBPrincipalActionPerformed
@@ -423,18 +646,20 @@ public class Productos extends javax.swing.JFrame {
 
     private void jBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCancelarActionPerformed
         // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_jBCancelarActionPerformed
 
     private void tableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductosMouseClicked
-      try{ aP.setVisible(true);
-       this.setVisible(true);
+      try{ 
+          /*aP.setVisible(true);
+       this.setVisible(true); */
     
         int fila = tableProductos.getSelectedRow();
         if(fila==-1){
             JOptionPane.showMessageDialog(null, "Selecciona un registro", "ERROR", JOptionPane.ERROR_MESSAGE);     
     }else{
             try {
-                int cc= Integer.parseInt((String) tableProductos.getValueAt(fila, 0).toString());
+             int cc= Integer.parseInt((String) tableProductos.getValueAt(fila, 0).toString());
             int cl=Integer.parseInt((String) tableProductos.getValueAt(fila, 1).toString());
             String nombre= (String) tableProductos.getValueAt(fila, 2);
             String des= (String) tableProductos.getValueAt(fila, 3);
@@ -466,6 +691,41 @@ public class Productos extends javax.swing.JFrame {
     private void jTExismActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTExismActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTExismActionPerformed
+
+    private void jCOpcionesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCOpcionesItemStateChanged
+        // TODO add your handling code here:
+        String b = (String) jCOpciones.getSelectedItem();
+        switch (b){
+            case "Clave Corta":
+            jTBuscar.setText(b);
+            break;
+            case "Nombre":
+                jTBuscar.setText(b);
+                break;
+            case "Existencias":
+                jTBuscar.setText(b);
+                break;
+            case "Tipo":
+                jTBuscar.setText(b);
+                break;    
+            case "Familia":
+                jTBuscar.setText(b);
+                break;
+        }
+    }//GEN-LAST:event_jCOpcionesItemStateChanged
+
+    private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
+        // TODO add your handling code here:
+        buscar();
+       
+    }//GEN-LAST:event_jBBuscarActionPerformed
+
+    private void jBbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbackActionPerformed
+        // TODO add your handling code here:
+        jTDato.setText("");
+        eliminartabla();
+        consultar();
+    }//GEN-LAST:event_jBbackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -504,12 +764,15 @@ public class Productos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAgregar;
-    private javax.swing.JButton jBAgregar1;
+    private javax.swing.JButton jBBuscar;
     private javax.swing.JButton jBCancelar;
     private javax.swing.JButton jBEliminar;
     private javax.swing.JButton jBModificar;
     private javax.swing.JButton jBPrincipal;
     private javax.swing.JButton jBProveedor;
+    private javax.swing.JButton jBback;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jCOpciones;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -519,6 +782,8 @@ public class Productos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTBuscar;
+    private javax.swing.JTextField jTDato;
     private javax.swing.JTextField jTExism;
     public javax.swing.JTable tableProductos;
     // End of variables declaration//GEN-END:variables

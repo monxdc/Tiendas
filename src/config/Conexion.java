@@ -6,8 +6,8 @@ import javax.swing.JOptionPane;
 
 public class Conexion {
 
-    String bd = "caducidades";
-    String url = "jdbc:mysql://localhost:3306/";
+    String bd = "tiendab";
+    String url = "jdbc:mysql://localhost:33065/";
     String user = "root";
     String password = "";
     String driver = "com.mysql.cj.jdbc.Driver";
