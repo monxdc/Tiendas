@@ -131,7 +131,41 @@ public class ControlProd extends javax.swing.JFrame {
         }
     }
 
-    void modificar() {}
+    void modificar() {
+        int fila = tableControl.getSelectedRow();
+        int clavec= Integer.parseInt((String) tableControl.getValueAt(fila, 0).toString());
+        String prov=jTidpr.getText();
+        String existencias =(String.valueOf(jTExistencias.getText()));
+        //String prod= jTnombreprod.getText();
+        /* */
+        Date cad = jDCaducidad.getDate(); 
+        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String caducidad = f.format(cad);
+        
+        Date ent= jDEntrada.getDate();
+        String entrada = f.format(ent);
+        
+        Date sal=jDSalida.getDate();
+        String salida=f.format(sal);
+        try{
+        String sql="UPDATE inventario SET fecha_caducidad='"+caducidad+"',fecha_entrada='"+entrada+"',fecha_salida='"+salida+"',existencias='"+existencias+"'"
+                + "where clave_corta="+clavec;
+        try {
+            conet = con1.getConnection();
+                st = conet.createStatement();
+                st.executeUpdate(sql);
+                JOptionPane.showMessageDialog(null, "Datos actualizados");
+                limpiartabla();
+            
+        } catch (Exception e) {
+            System.out.println(""+e);
+        }
+        
+        }catch (Exception e) {
+            System.out.println("ERROR MODIFICAR: "+e);
+        }
+        
+    }
     
 void eliminar(){
     try{
@@ -162,7 +196,7 @@ void buscar(){}
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jBAgregar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jBModi = new javax.swing.JButton();
         jBEliminar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -208,8 +242,13 @@ void buscar(){}
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jButton2.setText("Modificar");
+        jBModi.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jBModi.setText("Modificar");
+        jBModi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBModiActionPerformed(evt);
+            }
+        });
 
         jBEliminar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jBEliminar.setText("Eliminar");
@@ -227,7 +266,7 @@ void buscar(){}
                 .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jBAgregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBModi, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
@@ -237,7 +276,7 @@ void buscar(){}
                 .addGap(212, 212, 212)
                 .addComponent(jBAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jBModi, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jBEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(189, Short.MAX_VALUE))
@@ -327,6 +366,8 @@ void buscar(){}
                 jCCCItemStateChanged(evt);
             }
         });
+
+        jTClaveC.setEditable(false);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel3.setText("Clave Corta");
@@ -616,6 +657,12 @@ void buscar(){}
         }
     }//GEN-LAST:event_jCCCItemStateChanged
 
+    private void jBModiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBModiActionPerformed
+        // TODO add your handling code here:
+        modificar();
+        consultar();
+    }//GEN-LAST:event_jBModiActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -654,9 +701,9 @@ void buscar(){}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAgregar;
     private javax.swing.JButton jBEliminar;
+    private javax.swing.JButton jBModi;
     private javax.swing.JButton jBRegresar;
     private javax.swing.JButton jBuscar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jCCC;
     private javax.swing.JComboBox<String> jCprov;
     private com.toedter.calendar.JDateChooser jDCaducidad;
